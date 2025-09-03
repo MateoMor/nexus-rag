@@ -1,24 +1,43 @@
 import {supabase} from '@/lib/supabase/supabaseClient';
 import type { User, AuthError } from '@supabase/supabase-js';
 
+/**
+ * Interface for login credentials
+ */
 export interface LoginCredentials {
+  /** User's email address */
   email: string;
+  /** User's password */
   password: string;
 }
 
+/**
+ * Interface for user registration data
+ */
 export interface RegisterData {
+  /** User's email address */
   email: string;
+  /** User's password (minimum 6 characters) */
   password: string;
+  /** User's full name */
   name: string;
 }
 
+/**
+ * Interface for authentication response
+ */
 export interface AuthResponse {
+  /** Authenticated user object or null if failed */
   user: User | null;
+  /** Error message if authentication failed */
   error?: string;
 }
 
 /**
- * Initiate user login
+ * Authenticates a user with email and password
+ * 
+ * @param credentials - Object containing email and password
+ * @returns Promise<AuthResponse> - User object on success, error message on failure
  */
 export async function login(credentials: LoginCredentials): Promise<AuthResponse> {
   try {
@@ -41,7 +60,10 @@ export async function login(credentials: LoginCredentials): Promise<AuthResponse
 }
 
 /**
- * Register new users
+ * Registers a new user account
+ * 
+ * @param registerData - Object containing email, password, and name
+ * @returns Promise<AuthResponse> - User object on success, error message on failure
  */
 export async function register(registerData: RegisterData): Promise<AuthResponse> {
   try {
@@ -70,7 +92,9 @@ export async function register(registerData: RegisterData): Promise<AuthResponse
 }
 
 /**
- * Logout user
+ * Signs out the current user
+ * 
+ * @returns Promise<{ error?: string }> - Error message if logout failed
  */
 export async function logout(): Promise<{ error?: string }> {
   try {
@@ -89,7 +113,9 @@ export async function logout(): Promise<{ error?: string }> {
 }
 
 /**
- * Get current authenticated user
+ * Retrieves the current authenticated user
+ * 
+ * @returns Promise<User | null> - Current user object or null if not authenticated
  */
 export async function getCurrentUser(): Promise<User | null> {
   try {
@@ -102,7 +128,9 @@ export async function getCurrentUser(): Promise<User | null> {
 }
 
 /**
- * Login with Google OAuth
+ * Initiates Google OAuth authentication
+ * 
+ * @returns Promise<{ error?: string }> - Error message if OAuth initiation failed
  */
 export async function signInWithGoogle(): Promise<{ error?: string }> {
   try {
@@ -120,13 +148,16 @@ export async function signInWithGoogle(): Promise<{ error?: string }> {
     return {};
   } catch (error) {
     return { 
-      error: error instanceof Error ? error.message : 'Error with Google OAuth' 
+      error: error instanceof Error ? error.message : 'Error with Google OAuth'
     };
   }
 }
 
 /**
- * Reset password
+ * Sends a password reset email to the user
+ * 
+ * @param email - User's email address for password reset
+ * @returns Promise<{ error?: string }> - Error message if reset failed
  */
 export async function resetPassword(email: string): Promise<{ error?: string }> {
   try {
@@ -141,21 +172,26 @@ export async function resetPassword(email: string): Promise<{ error?: string }> 
     return {};
   } catch (error) {
     return { 
-      error: error instanceof Error ? error.message : 'Error sending recovery email' 
+      error: error instanceof Error ? error.message : 'Error sending reset email'
     };
   }
 }
 
 /**
- * Check if user is authenticated
+ * Checks if a user is currently authenticated
+ * 
+ * @returns Promise<boolean> - True if user is authenticated, false otherwise
  */
 export async function isAuthenticated(): Promise<boolean> {
   const user = await getCurrentUser();
-  return user !== null;
+  return !!user;
 }
 
 /**
- * Update user profile
+ * Updates the current user's profile information
+ * 
+ * @param updates - Object containing profile updates (full_name, avatar_url)
+ * @returns Promise<{ error?: string }> - Error message if update failed
  */
 export async function updateProfile(updates: { full_name?: string; avatar_url?: string }): Promise<{ error?: string }> {
   try {
@@ -176,7 +212,10 @@ export async function updateProfile(updates: { full_name?: string; avatar_url?: 
 }
 
 /**
- * Listen to auth state changes
+ * Sets up a listener for authentication state changes
+ * 
+ * @param callback - Function to call when auth state changes
+ * @returns Subscription object with unsubscribe method
  */
 export function onAuthStateChange(callback: (user: User | null) => void) {
   return supabase.auth.onAuthStateChange((event, session) => {
