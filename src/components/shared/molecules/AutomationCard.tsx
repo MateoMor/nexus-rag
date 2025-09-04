@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Settings } from 'lucide-react';
+import { Icon } from '@/components/shared/atoms/Icon';
 
 interface Automation {
   id: string;
@@ -53,7 +53,7 @@ export function AutomationCard({ automation, onToggle, onEdit }: AutomationCardP
                 size="sm"
                 onClick={() => onEdit(automation.id)}
               >
-                <Settings className="h-4 w-4" />
+                <Icon name="settings" size="sm" />
               </Button>
             )}
           </div>

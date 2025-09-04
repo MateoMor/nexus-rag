@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Upload } from 'lucide-react';
+import { Icon } from '@/components/shared/atoms/Icon';
 
 interface FileUploadProps {
   onFileUpload: (files: FileList) => void;
@@ -31,7 +31,7 @@ export function FileUpload({ onFileUpload, accept = ".pdf,.docx,.txt", multiple 
         disabled={disabled}
         className="pointer-events-none"
       >
-        <Upload className="h-4 w-4 mr-2" />
+        <Icon name="upload" size="sm" className="mr-2" />
         Upload Documents
       </Button>
       <Input

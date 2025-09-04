@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { Trash2 } from 'lucide-react';
+import { Icon } from '@/components/shared/atoms/Icon';
 
 interface Document {
   id: string;
@@ -70,7 +70,7 @@ export function DocumentCard({ document, onDelete }: DocumentCardProps) {
                 size="sm"
                 onClick={() => onDelete(document.id)}
               >
-                <Trash2 className="h-4 w-4" />
+                <Icon name="delete" size="sm" />
               </Button>
             )}
           </div>

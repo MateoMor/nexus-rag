@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Send } from 'lucide-react';
+import { Icon } from '@/components/shared/atoms/Icon';
 
 interface QueryInputProps {
   value: string;
@@ -38,7 +38,7 @@ export function QueryInput({ value, onChange, onSubmit, disabled }: QueryInputPr
         disabled={!value.trim() || disabled}
         size="icon"
       >
-        <Send className="h-4 w-4" />
+        <Icon name="send" size="sm" />
       </Button>
     </form>
   );

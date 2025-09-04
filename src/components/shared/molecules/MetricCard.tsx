@@ -1,11 +1,12 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Icon, IconName } from '@/components/shared/atoms/Icon';
 import { cn } from '@/lib/utils';
 
 interface MetricCardProps {
   title: string;
   value: string | number;
-  icon: string;
+  icon: IconName;
   trend?: string;
   limit?: string;
   status?: string;
@@ -38,7 +39,9 @@ export function MetricCard({
             {limit && <p className="text-sm text-muted-foreground">of {limit}</p>}
             {status && <p className="text-sm text-blue-600">{status}</p>}
           </div>
-          <div className="text-3xl">{icon}</div>
+          <div className="text-primary">
+            <Icon name={icon} size="xl" />
+          </div>
         </div>
       </CardContent>
     </Card>

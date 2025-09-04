@@ -89,25 +89,25 @@ function DashboardOverview({ stats }: { stats: DashboardStats }) {
       <MetricCard
         title="Documents"
         value={stats.totalDocuments}
-        icon="📄"
+        icon="document"
         trend="+12% this month"
       />
       <MetricCard
         title="Queries"
         value={stats.totalQueries}
-        icon="❓"
+        icon="chat"
         trend="+8% this month"
       />
       <MetricCard
         title="Storage Used"
         value={`${stats.storageUsed} MB`}
-        icon="💾"
+        icon="storage"
         limit="500 MB"
       />
       <MetricCard
         title="Avg Response"
         value={`${stats.avgResponseTime}ms`}
-        icon="⚡"
+        icon="lightning"
         status="Excellent"
       />
     </div>
@@ -304,7 +304,7 @@ function DashboardHeader() {
     <header className="bg-background border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
-          <div></div>
+          <div>
             <h1 className="text-2xl font-bold">Nexus RAG Dashboard</h1>
             <p className="text-muted-foreground">Welcome back, {user?.user_metadata?.name || user?.email}</p>
           </div>
@@ -323,6 +323,7 @@ function DashboardHeader() {
             </Button>
           </div>
         </div>
+      </div>
     </header>
   );
 }

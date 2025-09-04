@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Icon, IconName } from '@/components/shared/atoms/Icon';
 
 interface Activity {
   id: string;
@@ -20,18 +21,20 @@ interface ActivityItemProps {
  * @returns JSX.Element - Single activity entry with icon and description
  */
 export function ActivityItem({ activity }: ActivityItemProps) {
-  const getIcon = (type: string) => {
+  const getIcon = (type: string): IconName => {
     switch (type) {
-      case 'document_uploaded': return '📄';
-      case 'query_made': return '❓';
-      case 'automation_triggered': return '🤖';
-      default: return '📝';
+      case 'document_uploaded': return 'document';
+      case 'query_made': return 'chat';
+      case 'automation_triggered': return 'bot';
+      default: return 'activity';
     }
   };
 
   return (
     <div className="flex items-start space-x-3 p-3 hover:bg-accent/50 rounded-lg transition-colors">
-      <div className="text-lg">{getIcon(activity.type)}</div>
+      <div className="flex-shrink-0 mt-0.5">
+        <Icon name={getIcon(activity.type)} size="md" className="text-muted-foreground" />
+      </div>
       <div className="flex-1">
         <p className="text-sm font-medium">
           {activity.description}
