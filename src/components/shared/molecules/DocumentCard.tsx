@@ -4,15 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Icon } from '@/components/shared/atoms/Icon';
 
-interface Document {
-  id: string;
-  name: string;
-  type: 'pdf' | 'docx' | 'txt';
-  size: number;
-  uploadDate: string;
-  status: 'processing' | 'ready' | 'error';
-  chunks: number;
-}
+import type { Document } from '@/types';
 
 interface DocumentCardProps {
   document: Document;

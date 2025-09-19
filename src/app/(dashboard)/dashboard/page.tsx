@@ -7,112 +7,19 @@ import { useRouter } from 'next/navigation';
 // Import shadcn/ui components
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Spinner } from '@/components/shared/atoms/spinner';
 
-// Import refactored molecules
-import { MetricCard } from '@/components/shared/molecules/MetricCard';
+// Import types
+import type { Document, ChatMessage } from '@/types';
+
+// Import molecules
 import { DocumentCard } from '@/components/shared/molecules/DocumentCard';
 import { MessageBubble } from '@/components/shared/molecules/MessageBubble';
 import { QueryInput } from '@/components/shared/molecules/QueryInput';
 import { FileUpload } from '@/components/shared/molecules/FileUpload';
-import { AutomationCard } from '@/components/shared/molecules/AutomationCard';
-import { ActivityItem } from '@/components/shared/molecules/ActivityItem';
 
 // Import icons
-import { Settings, LogOut, Plus, Bot } from 'lucide-react';
+import { Settings, LogOut, Bot } from 'lucide-react';
 
-/**
- * Interface for dashboard statistics
- */
-interface DashboardStats {
-  totalDocuments: number;
-  totalQueries: number;
-  storageUsed: number;
-  queriesThisMonth: number;
-  avgResponseTime: number;
-  mostUsedFeature: string;
-}
-
-/**
- * Interface for document data
- */
-interface Document {
-  id: string;
-  name: string;
-  type: 'pdf' | 'docx' | 'txt';
-  size: number;
-  uploadDate: string;
-  status: 'processing' | 'ready' | 'error';
-  chunks: number;
-}
-
-/**
- * Interface for chat messages
- */
-interface ChatMessage {
-  id: string;
-  type: 'user' | 'assistant';
-  content: string;
-  timestamp: string;
-  sources?: string[];
-}
-
-/**
- * Interface for automation workflows
- */
-interface Automation {
-  id: string;
-  name: string;
-  trigger: 'document_upload' | 'daily_summary' | 'keyword_mention';
-  action: 'send_email' | 'slack_notification' | 'generate_summary';
-  status: 'active' | 'paused';
-  lastRun: string;
-}
-
-/**
- * Interface for activity feed items
- */
-interface Activity {
-  id: string;
-  type: 'document_uploaded' | 'query_made' | 'automation_triggered';
-  description: string;
-  timestamp: string;
-  metadata?: Record<string, any>;
-}
-
-/**
- * Dashboard overview section with key metrics
- */
-function DashboardOverview({ stats }: { stats: DashboardStats }) {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      <MetricCard
-        title="Documents"
-        value={stats.totalDocuments}
-        icon="document"
-        trend="+12% this month"
-      />
-      <MetricCard
-        title="Queries"
-        value={stats.totalQueries}
-        icon="chat"
-        trend="+8% this month"
-      />
-      <MetricCard
-        title="Storage Used"
-        value={`${stats.storageUsed} MB`}
-        icon="storage"
-        limit="500 MB"
-      />
-      <MetricCard
-        title="Avg Response"
-        value={`${stats.avgResponseTime}ms`}
-        icon="lightning"
-        status="Excellent"
-      />
-    </div>
-  );
-}
 
 /**
  * Document management section
@@ -234,67 +141,6 @@ function ChatInterface() {
 }
 
 /**
- * Automation management section
- */
-function AutomationManager({ automations }: { automations: Automation[] }) {
-  return (
-    <Card>
-      <CardHeader>
-        <div className="flex justify-between items-center">
-          <CardTitle>Automations</CardTitle>
-          <Button size="sm">
-            <Plus className="h-4 w-4 mr-2" />
-            Create Automation
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        {automations.length > 0 ? (
-          <div className="space-y-3">
-            {automations.map(automation => (
-              <AutomationCard key={automation.id} automation={automation} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-8 text-muted-foreground">
-            <div className="text-4xl mb-4">🤖</div>
-            <p>No automations configured</p>
-            <p className="text-sm">Create your first automation workflow</p>
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
-
-/**
- * Recent activity feed
- */
-function ActivityFeed({ activities }: { activities: Activity[] }) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Recent Activity</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {activities.length > 0 ? (
-          <div className="space-y-1 max-h-64 overflow-y-auto">
-            {activities.map(activity => (
-              <ActivityItem key={activity.id} activity={activity} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-8 text-muted-foreground">
-            <div className="text-4xl mb-4">📊</div>
-            <p>No recent activity</p>
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
-
-/**
  * Dashboard header component
  */
 function DashboardHeader() {
@@ -329,22 +175,13 @@ function DashboardHeader() {
 }
 
 /**
- * Main dashboard page component
+ * Main dashboard page component - Only Documents and Chat
  */
 export default function DashboardPage() {
   const { user, loading, isAuthenticated } = useAuth();
   const router = useRouter();
 
-  // Mock data - replace with real data fetching
-  const [stats] = useState<DashboardStats>({
-    totalDocuments: 12,
-    totalQueries: 156,
-    storageUsed: 89,
-    queriesThisMonth: 45,
-    avgResponseTime: 850,
-    mostUsedFeature: 'Document Query'
-  });
-
+  // Mock documents data
   const [documents] = useState<Document[]>([
     {
       id: '1',
@@ -363,46 +200,6 @@ export default function DashboardPage() {
       uploadDate: '2024-01-14',
       status: 'processing',
       chunks: 23
-    }
-  ]);
-
-  const [automations] = useState<Automation[]>([
-    {
-      id: '1',
-      name: 'Daily Summary Email',
-      trigger: 'daily_summary',
-      action: 'send_email',
-      status: 'active',
-      lastRun: '2024-01-15'
-    },
-    {
-      id: '2',
-      name: 'Document Upload Notification',
-      trigger: 'document_upload',
-      action: 'slack_notification',
-      status: 'paused',
-      lastRun: '2024-01-10'
-    }
-  ]);
-
-  const [activities] = useState<Activity[]>([
-    {
-      id: '1',
-      type: 'query_made',
-      description: 'Asked about Q4 revenue from Company_Report_2024.pdf',
-      timestamp: '2024-01-15T10:30:00Z'
-    },
-    {
-      id: '2',
-      type: 'document_uploaded',
-      description: 'Uploaded Product_Specifications.docx',
-      timestamp: '2024-01-14T15:45:00Z'
-    },
-    {
-      id: '3',
-      type: 'automation_triggered',
-      description: 'Daily Summary Email sent successfully',
-      timestamp: '2024-01-14T09:00:00Z'
     }
   ]);
 
@@ -432,22 +229,10 @@ export default function DashboardPage() {
       <DashboardHeader />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Overview Section */}
-        <DashboardOverview stats={stats} />
-        
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Documents & Chat */}
-          <div className="lg:col-span-2 space-y-8">
-            <DocumentManager documents={documents} />
-            <ChatInterface />
-          </div>
-          
-          {/* Right Column - Automations & Activity */}
-          <div className="space-y-8">
-            <AutomationManager automations={automations} />
-            <ActivityFeed activities={activities} />
-          </div>
+        {/* Main Content Grid - Only Documents & Chat */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <DocumentManager documents={documents} />
+          <ChatInterface />
         </div>
       </main>
     </div>

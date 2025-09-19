@@ -2,13 +2,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
-interface ChatMessage {
-  id: string;
-  type: 'user' | 'assistant';
-  content: string;
-  timestamp: string;
-  sources?: string[];
-}
+import type { ChatMessage } from '@/types';
 
 interface MessageBubbleProps {
   message: ChatMessage;
